@@ -27,7 +27,33 @@ const getUseModel = (req: any, tokenCount: number, config: any) => {
 };
 
 export const router = async (req: any, res: any, config: any) => {
+  // Skip processing for Synapse API endpoints
+  if (req.url && req.url.startsWith('/api/synapse/')) {
+    console.log('Skipping router processing for Synapse API:', req.url);
+    return;
+  }
+  
+  if (!req.body) {
+    console.log('No request body, skipping router');
+    return;
+  }
+  
+  console.log('Processing router for:', req.url);
   const { messages, system = [], tools }: MessageCreateParamsBase = req.body;
+  
+  // Check for Synapse context headers
+  const hasSynapseContext = req.headers['x-synapse-project-id'] || 
+                           req.headers['x-synapse-agent-id'] || 
+                           req.headers['x-synapse-agent-type'];
+  
+  // If Synapse context is detected and enhanced routing is enabled, 
+  // let the enhanced router handle the request
+  if (hasSynapseContext && (req as any).synapseContext) {
+    log("Synapse context detected, using enhanced routing");
+    // Enhanced router will handle model selection
+    return;
+  }
+  
   try {
     let tokenCount = 0;
     if (Array.isArray(messages)) {
