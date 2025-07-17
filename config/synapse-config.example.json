@@ -1,0 +1,131 @@
+{
+  "models": {
+    "default": "claude-3-5-sonnet-20241022",
+    "coder": "deepseek-chat",
+    "tool": "qwen-max-2025-01-25",
+    "think": "deepseek-reasoner",
+    "fast": "claude-3-5-haiku-20241022",
+    "longContext": "claude-3-5-sonnet-20241022"
+  },
+  "providers": {
+    "deepseek": {
+      "apiKey": "sk-deepseek-your-key",
+      "baseUrl": "https://api.deepseek.com",
+      "models": ["deepseek-chat", "deepseek-reasoner"]
+    },
+    "openrouter": {
+      "apiKey": "sk-or-your-key",
+      "baseUrl": "https://openrouter.ai/api/v1",
+      "models": ["claude-3-5-sonnet-20241022", "claude-3-5-haiku-20241022"]
+    },
+    "qwen": {
+      "apiKey": "sk-qwen-your-key",
+      "baseUrl": "https://dashscope.aliyuncs.com/compatible-mode/v1",
+      "models": ["qwen-max-2025-01-25", "qwen2.5-coder-3b-instruct"]
+    },
+    "anthropic": {
+      "apiKey": "sk-ant-your-key",
+      "baseUrl": "https://api.anthropic.com/v1",
+      "models": ["claude-3-5-sonnet-20241022", "claude-3-5-haiku-20241022"]
+    },
+    "openai": {
+      "apiKey": "sk-openai-your-key",
+      "baseUrl": "https://api.openai.com/v1",
+      "models": ["gpt-4o", "gpt-4o-mini"]
+    },
+    "groq": {
+      "apiKey": "gsk-groq-your-key",
+      "baseUrl": "https://api.groq.com/openai/v1",
+      "models": ["llama-3.3-70b-versatile", "llama-3.1-70b-versatile"]
+    }
+  },
+  "routing": {
+    "enabled": true,
+    "fallbackEnabled": true,
+    "retryAttempts": 3,
+    "loadBalancing": {
+      "enabled": true,
+      "strategy": "round_robin"
+    },
+    "costOptimization": {
+      "enabled": true,
+      "preferCheaperModels": true
+    }
+  },
+  "monitoring": {
+    "usageTracking": true,
+    "healthChecks": true,
+    "costTracking": true,
+    "performanceMetrics": true,
+    "alerting": {
+      "enabled": false,
+      "thresholds": {
+        "errorRate": 0.1,
+        "avgLatency": 5000
+      }
+    }
+  },
+  "security": {
+    "rateLimiting": {
+      "enabled": true,
+      "requestsPerMinute": 100,
+      "burstLimit": 20
+    },
+    "apiKeyRotation": {
+      "enabled": false,
+      "intervalHours": 24
+    }
+  },
+  "agentMapping": {
+    "coding": {
+      "primaryModel": "deepseek-chat",
+      "fallbackModels": ["claude-3-5-sonnet-20241022", "gpt-4o"],
+      "contextWindow": 32768,
+      "temperature": 0.1
+    },
+    "analysis": {
+      "primaryModel": "qwen-max-2025-01-25",
+      "fallbackModels": ["claude-3-5-sonnet-20241022", "gpt-4o"],
+      "contextWindow": 32768,
+      "temperature": 0.2
+    },
+    "reasoning": {
+      "primaryModel": "deepseek-reasoner",
+      "fallbackModels": ["claude-3-5-sonnet-20241022", "gpt-4o"],
+      "contextWindow": 65536,
+      "temperature": 0.0
+    },
+    "general": {
+      "primaryModel": "claude-3-5-sonnet-20241022",
+      "fallbackModels": ["gpt-4o", "deepseek-chat"],
+      "contextWindow": 200000,
+      "temperature": 0.7
+    }
+  },
+  "costLimits": {
+    "global": {
+      "daily": 100.0,
+      "monthly": 2000.0
+    },
+    "perProject": {
+      "daily": 50.0,
+      "monthly": 1000.0
+    },
+    "perAgent": {
+      "daily": 20.0,
+      "monthly": 400.0
+    }
+  },
+  "caching": {
+    "enabled": true,
+    "ttl": 3600,
+    "maxSize": 1000
+  },
+  "logging": {
+    "level": "info",
+    "destination": "file",
+    "retention": {
+      "days": 30
+    }
+  }
+}
